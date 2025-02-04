@@ -5,14 +5,15 @@
   import { ref } from 'vue'
 
   defineProps<InventoryProps>()
-  defineEmits<InventaryEmits>()
+  const emit = defineEmits<InventaryEmits>()
   const store = storeInventory()
 
   const drugItemIdx = ref<number | null>(null)
 
-  const onDrop = (idx: number) => {
+  const onDrop = (e: any, idx: number) => {
     if (drugItemIdx.value != null) {
       store.moveItem(drugItemIdx.value, idx)
+      onDragLeave(e)
     }
   }
 
@@ -29,7 +30,7 @@
   <div class="inventory">
     <div
       v-for="i in 25"
-      @drop="onDrop(i)"
+      @drop="onDrop($event, i)"
       @dragstart="drugItemIdx = i"
       @dragover.prevent
       @dragenter.prevent="onDragEnter"
